@@ -1,0 +1,10 @@
+h1 {
+    color: red;
+    background-color: black;
+}
+
+button {
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+}
