@@ -1,49 +1,421 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso - Desarrollo Web con IA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barbería Barberos | Cortes de Precisión</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          /* === PALETA REDUCIDA: 3 colores principales === */
+          /* Negro casi puro — texto, bordes, CTA primario */
+          "ink":      "#111111",
+          /* Blanco — fondos, texto sobre oscuro */
+          "chalk":    "#F8F8F6",
+          /* Azul profundo — único acento cromático */
+          "accent":   "#1A00CC",
+          /* Grises de apoyo — solo para texto secundario y fondos suaves */
+          "muted":    "#6B6B6B",
+          "surface":  "#EFEFED",
+        },
+        fontFamily: {
+          sans: ["Hanken Grotesk", "sans-serif"],
+        },
+        spacing: {
+          "page-x-sm": "20px",
+          "page-x-lg": "80px",
+          "section":   "120px",
+        },
+        borderRadius: {
+          DEFAULT: "2px",
+        }
+      }
+    }
+  }
+</script>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: #F8F8F6;
+    color: #111111;
+    font-family: 'Hanken Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tipografía */
+  .t-display   { font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -0.04em; font-weight: 700; }
+  .t-headline  { font-size: clamp(24px, 3vw, 32px); line-height: 1.2;  letter-spacing: -0.02em; font-weight: 700; }
+  .t-body-lg   { font-size: 18px; line-height: 1.65; font-weight: 400; }
+  .t-body      { font-size: 16px; line-height: 1.65; font-weight: 400; }
+  .t-label     { font-size: 13px; line-height: 1;    letter-spacing: 0.08em; font-weight: 700; text-transform: uppercase; }
+  .t-caption   { font-size: 12px; line-height: 1;    font-weight: 400; }
+
+  /* Bordes */
+  .rule        { border: 1px solid #111111; }
+  .rule-muted  { border: 1px solid #D4D4D2; }
+
+  /* Botones */
+  .btn-primary {
+    display: inline-block;
+    background: #111111;
+    color: #F8F8F6;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    border: 1px solid #111111;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-primary:hover { background: #1A00CC; border-color: #1A00CC; }
+
+  .btn-ghost {
+    display: inline-block;
+    background: transparent;
+    color: #111111;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    border: 1px solid #111111;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-ghost:hover { background: #EFEFED; }
+
+  /* Material Icons */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* Micro-interacción botones */
+  button:active { transform: translateY(1px); }
+
+  /* Scroll suave */
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
 </head>
-<body>
-    <section>
-    <h1 class="text-3xl font-bold underline">Curso - Desarrollo Web con IA</h1>
-    <h2 class="text-2xl font-bold">Bienvenidos a mi pagina web</h2>
-    <h3 class="text-xl underline text-blue-900">Subtitulo de la pagina</h3>
-        <h4 class="text-lg font-bold">Subtitulo de la pagina</h4>
-        <h5 class="text-base font-bold">Subtitulo de la pagina</h5>
-        <h6 class="text-sm font-bold">Subtitulo de la pagina</h6>
-        <p class="text-sm text-gray-500">Este es un parrafo de la pagina</p>
-        <h2 class="text-2xl font-bold [text-shadow:3px_3px_6px_rgba(0,0,0,0.7)]">
-            Bienvenidos a mi pagina web</h2>
-    </section>
+<body class="flex flex-col min-h-screen">
 
-    <section>
-        <ul>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-        </ul>
-        <ol>
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-        </ol>
-    </section>
+<!-- ═══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center
+               px-[20px] md:px-[80px] h-[60px]
+               bg-chalk border-b border-ink">
+  <div class="t-label tracking-widest">Barbería Barberos</div>
 
-    <img 
-    src="https://ncube.com/wp-content/uploads/2020/02/Top-8-Software-Development-Models.jpg" 
-    alt="Imagen de un desarrollo web"
-    class="w-full max-w-2xl h-auto rounded-lg shadow-lg mx-auto block border-red-500 border-4">
-    <br>
+  <nav class="hidden md:flex gap-10 items-center">
+    <a class="t-label text-muted hover:text-ink transition-colors" href="#servicios">Servicios</a>
+    <a class="t-label text-muted hover:text-ink transition-colors" href="#galeria">Galería</a>
+    <a class="t-label text-muted hover:text-ink transition-colors" href="#historia">Historia</a>
+  </nav>
 
-    <a href="https://www.facebook.com" target="_blank">Google</a>
+  <button class="btn-primary py-3 px-6" style="font-size:12px;">Reservar</button>
+</header>
 
-    <button>Click me</button>
 
-    <footer>
-        <p>Derechos reservados &copy; 2026</p>
-    </footer>
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<main class="mt-[60px] flex-grow">
+<section class="min-h-[88vh] flex flex-col justify-center
+                px-[20px] md:px-[80px]
+                py-24 md:py-40
+                border-b border-ink">
+  <div class="max-w-[1100px]">
+    <!-- Eyebrow -->
+    <p class="t-label text-muted mb-8">Barbería Barberos — San Isidro, Lima</p>
+
+    <!-- Headline -->
+    <h1 class="t-display text-ink mb-8 max-w-[820px]">
+        El corte que sí queda<br/>como en la foto.
+    </h1>
+
+    <!-- Subhead -->
+    <p class="t-body-lg text-muted mb-12 max-w-[540px]">
+        Reserva en minutos. Sal en menos de una hora con un corte que dure tres semanas.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-col sm:flex-row gap-4">
+      <button class="btn-primary">Agendar Cita</button>
+      <button class="btn-ghost">Ver Galería</button>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS & PRECIOS -->
+<section id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+    <p class="t-label text-muted mb-16">Lo que ofrecemos</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-ink rule">
+      <div class="bg-chalk p-10 flex flex-col gap-4">
+        <p class="t-headline">Corte clásico</p>
+        <p class="t-body text-muted">Corte a tijera o máquina con acabado a navaja.</p>
+        <p class="t-label text-ink mt-auto">S/ 65</p>
+      </div>
+      <div class="bg-chalk p-10 flex flex-col gap-4">
+        <p class="t-headline">Corte + barba</p>
+        <p class="t-body text-muted">Servicio completo con perfilado y arreglo de barba.</p>
+        <p class="t-label text-ink mt-auto">S/ 95</p>
+      </div>
+      <div class="bg-accent p-10 flex flex-col gap-4">
+        <p class="t-label text-chalk opacity-60 mb-1">Más solicitado</p>
+        <p class="t-headline text-chalk">Experiencia premium</p>
+        <p class="t-body text-chalk opacity-70">Corte, barba, lavado y tratamiento capilar.</p>
+        <p class="t-label text-chalk mt-auto">S/ 140</p>
+      </div>
+    </div>
+  </section>
+
+
+<!-- ═══════════════════════════════════════════
+     BENTO GRID (visual anchor)
+═══════════════════════════════════════════ -->
+<section id="galeria" class="px-[20px] md:px-[80px] py-24">
+
+  <!-- Encabezado de sección -->
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+    <div>
+      <p class="t-label text-muted mb-4">Galería</p>
+      <h2 class="t-headline text-ink max-w-[420px]">El arte del corte, en cada detalle</h2>
+    </div>
+    <p class="t-body text-muted max-w-[380px] md:text-right">
+      Un espacio donde la técnica y la estética se encuentran. Cada imagen refleja el nivel de cuidado que ponemos en cada visita.
+    </p>
+  </div>
+
+  <!-- Grid 3 columnas, 2 filas — todas las celdas cubiertas -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-[6px]"
+       style="grid-auto-rows: 300px;">
+
+    <!-- [Fila 1, col 1–2] Foto principal del barbero -->
+    <div class="md:col-span-2 md:row-span-2 rule overflow-hidden">
+      <div class="w-full h-full bg-cover bg-center"
+           style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7hAZKBeL3qUvNvKJi0ScU1A4XQXSkTqfw8S9FYjrPamPGXMGApb4I08E3fTxzCdrTHuRqDhpnmZw_eqKluRLxhirWB7EaKxx3DgzXv-cHm1ws4GUgSwgPeITjeAdA_0JyTwVC5tgX8zY_ZS3zTHTbrPgfJE92HewYWixHoKcyzLx-Kp8CIPYyHFad-hwZ0yeHfF_4L3RWuERwpi5DQkpAKhK_ytANZWSu0lCFPeIquqGckDOxz089JKMYeG84FM9_USkCGkjVCE0')">
+      </div>
+    </div>
+
+    <!-- [Fila 1, col 3] Panel azul — dato de antigüedad -->
+    <div class="rule bg-accent p-10 flex flex-col justify-end">
+      <p class="t-label text-chalk opacity-60 mb-3">Fundada en</p>
+      <p class="t-headline text-chalk">2015</p>
+    </div>
+
+    <!-- [Fila 2, col 3] Panel neutro — especialidad -->
+    <div class="rule bg-surface p-10 flex flex-col justify-end">
+      <p class="t-label text-muted mb-3">Especialidad</p>
+      <p class="t-headline text-ink">Grooming<br/>de precisión</p>
+    </div>
+
+    <!-- [Fila 3, col 1–2] Foto herramientas -->
+    <div class="md:col-span-2 rule overflow-hidden">
+      <div class="w-full h-full bg-cover bg-center"
+           style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAa9jVHw5PlHyz8TD3Nu7RTmNh63XthDMvEeSeSin-xcLtaU2Ekc5v8ICf8FVebhmLJQBtOUCjMcikvQvjcK2I2jKQguJm59FStTK9VfHw8iOY13KOtzTpKHPB3mr0MU0csHgBTku4LjmgQnHiThpbh9eSSkJ2eKO4Jg7DzOX2BVaxFVw-v0hIHlMkEG14dDDmtsHZhEg5DWXiwBSdFNf70ALvPdmbIQIzehq-pV3rZnPYG9saqdtIWFTT7lFDmv8pdzcI6s0XdYRI')">
+      </div>
+    </div>
+
+    <!-- [Fila 3, col 3] Card nueva — stat o dato de servicio -->
+    <div class="rule bg-ink p-10 flex flex-col justify-end">
+      <p class="t-label text-chalk opacity-60 mb-3">Clientes atendidos</p>
+      <p class="t-headline text-chalk">+4,000</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     BENEFICIOS / SERVICIOS
+═══════════════════════════════════════════ -->
+<section id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+
+  <!-- Eyebrow -->
+  <p class="t-label text-muted mb-16">Por qué Barbería Barberos</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+
+    <div class="flex flex-col gap-5">
+      <div class="w-12 h-12 rule flex items-center justify-center">
+        <span class="material-symbols-outlined" style="color:#111111;">star</span>
+      </div>
+      <h3 class="t-headline">Experiencia premium</h3>
+      <p class="t-body text-muted">Técnicas tradicionales combinadas con el enfoque más contemporáneo de la estética masculina.</p>
+    </div>
+
+    <div class="flex flex-col gap-5">
+      <div class="w-12 h-12 rule flex items-center justify-center">
+        <span class="material-symbols-outlined" style="color:#111111;">content_cut</span>
+      </div>
+      <h3 class="t-headline">Estilo personalizado</h3>
+      <p class="t-body text-muted">Cada corte es una pieza única, adaptada a la estructura facial y personalidad de cada cliente.</p>
+    </div>
+
+    <div class="flex flex-col gap-5">
+      <div class="w-12 h-12 rule flex items-center justify-center">
+        <span class="material-symbols-outlined" style="color:#111111;">chair</span>
+      </div>
+      <h3 class="t-headline">Ambiente sin ruido</h3>
+      <p class="t-body text-muted">Un espacio diseñado para el enfoque, donde el detalle es el verdadero protagonista.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     HISTORIA
+═══════════════════════════════════════════ -->
+<section id="historia" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
+    <!-- Foto -->
+    <div class="rule overflow-hidden" style="aspect-ratio: 4/3;">
+      <img alt="Interior de Barbería Barberos"
+           class="w-full h-full object-cover"
+           src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQV57E69OxA2JvWp6GUQpECNNDK9ADW_AZZ-7VwUWRpXb9-hDZYKEqXojEq5ITomqWsRZJpqCP-O4HgDwDzyjmZ1fA8L8OzZbLXE9ft5P4akBPAiBs6ac_AAvND7t71nSJBTcmp5wtVKTAQzWLwFrbLYyw2dnDQPxVYwhAdbM0Naly8QKUaXSa9H54e0RxCWYscqVYrd8tikzDQIRzHwurQdOJFYbr7M5SYf1_SRdIpEglDPhzRg1U22R-U3VhKwPf8O4dXizKulY"/>
+    </div>
+
+    <!-- Texto -->
+    <div class="flex flex-col gap-10 pt-2">
+      <div>
+        <p class="t-label text-muted mb-6">Nuestra historia</p>
+        <h2 class="t-headline mb-6">Fundada con una visión clara</h2>
+        <p class="t-body-lg text-muted">
+          Desde 2015, Barbería Barberos nació para redefinir el cuidado masculino en Lima. Nuestra filosofía: precisión técnica y minimalismo estético que pone el estilo de cada cliente en primer plano.
+        </p>
+      </div>
+
+      <div class="rule-muted border-t pt-8 flex flex-col gap-8">
+        <div>
+          <p class="t-label text-ink mb-3">Misión</p>
+          <p class="t-body text-muted">Elevar el estándar de la barbería tradicional con excelencia técnica y servicio personalizado.</p>
+        </div>
+        <div>
+          <p class="t-label text-ink mb-3">Visión</p>
+          <p class="t-body text-muted">Ser el referente del grooming masculino contemporáneo, donde simplicidad y maestría convergen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+    <p class="t-label text-muted mb-16">Lo que dicen nuestros clientes</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="rule p-8 flex flex-col gap-6">
+        <p class="t-body text-ink">"El mejor corte que he tenido en Lima. Atención impecable y resultado exactamente lo que pedí."</p>
+        <div class="rule-muted border-t pt-6">
+          <p class="t-label text-ink">Rodrigo M.</p>
+          <p class="t-caption text-muted mt-1">Cliente desde 2021</p>
+        </div>
+      </div>
+      <div class="rule p-8 flex flex-col gap-6">
+        <p class="t-body text-ink">"Vine por primera vez sin referencias y salí siendo cliente fijo. El ambiente y la técnica no tienen comparación."</p>
+        <div class="rule-muted border-t pt-6">
+          <p class="t-label text-ink">Sebastián V.</p>
+          <p class="t-caption text-muted mt-1">Cliente desde 2022</p>
+        </div>
+      </div>
+      <div class="rule p-8 flex flex-col gap-6">
+        <p class="t-body text-ink">"Preciso, rápido y sin distracciones. Exactamente lo que buscaba. Ya agendé para el próximo mes."</p>
+        <div class="rule-muted border-t pt-6">
+          <p class="t-label text-ink">Alonso P.</p>
+          <p class="t-caption text-muted mt-1">Cliente desde 2023</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ═══════════════════════════════════════════
+     CTA FINAL
+═══════════════════════════════════════════ -->
+<section class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+  <div class="rule p-16 md:p-28 flex flex-col items-start gap-10 bg-ink">
+    <p class="t-label text-chalk opacity-50">Reserva tu lugar</p>
+    <h2 class="t-display text-chalk max-w-[600px]">
+      Listo para el cambio?
+    </h2>
+    <div class="flex flex-col sm:flex-row gap-4">
+      <!-- CTA primario: blanco sobre negro (contraste máximo) -->
+      <button style="
+        display:inline-block;
+        background:#F8F8F6;
+        color:#111111;
+        font-size:13px;
+        font-weight:700;
+        letter-spacing:0.08em;
+        text-transform:uppercase;
+        padding:18px 40px;
+        border:1px solid #F8F8F6;
+        border-radius:2px;
+        cursor:pointer;
+        transition:background 0.15s;
+      " onmouseover="this.style.background='#EFEFED'" onmouseout="this.style.background='#F8F8F6'">
+        Reservar Ahora 
+      </button>
+      <!-- CTA secundario: ghost sobre negro -->
+      <button style="
+        display:inline-block;
+        background:transparent;
+        color:#F8F8F6;
+        font-size:13px;
+        font-weight:700;
+        letter-spacing:0.08em;
+        text-transform:uppercase;
+        padding:18px 40px;
+        border:1px solid rgba(248,248,246,0.4);
+        border-radius:2px;
+        cursor:pointer;
+        transition:border-color 0.15s;
+      " onmouseover="this.style.borderColor='#F8F8F6'" onmouseout="this.style.borderColor='rgba(248,248,246,0.4)'">
+        Ver Galería
+      </button>
+      <a href="https://wa.me/51XXXXXXXXX" 
+   class="t-label text-chalk opacity-50 hover:opacity-100 transition-opacity flex items-center gap-3">
+  <span class="material-symbols-outlined" style="color:currentColor;font-size:18px;">chat</span>
+  O escríbenos por WhatsApp
+</a>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="w-full py-8 px-[20px] md:px-[80px]
+               flex flex-col md:flex-row justify-between items-center gap-4
+               border-t border-ink">
+  <div class="t-label">Barbería Barberos</div>
+
+  <div class="flex flex-wrap justify-center gap-8">
+    <a class="t-caption text-muted hover:text-ink transition-colors" href="#">Privacidad</a>
+    <a class="t-caption text-muted hover:text-ink transition-colors" href="#">Términos</a>
+    <a class="t-caption text-muted hover:text-ink transition-colors" href="#">Instagram</a>
+  </div>
+
+  <div class="t-caption text-muted">© 2025 Barbería Barberos</div>
+</footer>
+
 </body>
 </html>
