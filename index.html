@@ -4,6 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Barbería Barberos | Cortes de Precisión</title>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -107,8 +108,78 @@
   /* Scroll suave */
   html { scroll-behavior: smooth; }
 
+  /* Scroll reveal — solo oculta si JS está activo */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  html.js .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  html.js .reveal-delay-1 { transition-delay: 0.08s; }
+  html.js .reveal-delay-2 { transition-delay: 0.16s; }
+  html.js .reveal-delay-3 { transition-delay: 0.24s; }
+  html.js .reveal-delay-4 { transition-delay: 0.32s; }
+  html.js .reveal-delay-5 { transition-delay: 0.4s; }
+
+  /* Typewriter hero */
+  .typewriter-wrap {
+    position: relative;
+    min-height: 2.1em;
+  }
+
+  .typewriter-ghost {
+    visibility: hidden;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .typewriter-live {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+
+  .typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.9em;
+    background: #111111;
+    margin-left: 3px;
+    vertical-align: text-bottom;
+    animation: typewriter-blink 0.75s step-end infinite;
+  }
+
+  .typewriter-cursor.is-done {
+    animation: none;
+    opacity: 0;
+  }
+
+  @keyframes typewriter-blink {
+    50% { opacity: 0; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
+    html.js .reveal:not(.is-visible),
+    html.js .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .typewriter-ghost { display: none; }
+    .typewriter-live { position: static; }
+    .typewriter-cursor { display: none; }
   }
 </style>
 </head>
@@ -120,63 +191,112 @@
 <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center
                px-[20px] md:px-[80px] h-[60px]
                bg-chalk border-b border-ink">
+
   <div class="t-label tracking-widest">Barbería Barberos</div>
 
+  <!-- Nav desktop (sin cambios) -->
   <nav class="hidden md:flex gap-10 items-center">
     <a class="t-label text-muted hover:text-ink transition-colors" href="#servicios">Servicios</a>
     <a class="t-label text-muted hover:text-ink transition-colors" href="#galeria">Galería</a>
     <a class="t-label text-muted hover:text-ink transition-colors" href="#historia">Historia</a>
   </nav>
 
-  <button class="btn-primary py-3 px-6" style="font-size:12px;">Reservar</button>
+  <!-- Lado derecho -->
+  <div class="flex items-center gap-4">
+    <!-- Botón reservar — solo desktop -->
+    <button class="hidden md:inline-block btn-primary py-3 px-6" style="font-size:12px;">
+      Reservar
+    </button>
+
+    <!-- Hamburguesa — solo móvil -->
+    <button
+      id="menu-toggle"
+      class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[6px] focus:outline-none"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+    >
+      <span class="menu-bar block w-6 h-[1.5px] bg-ink transition-all duration-300 origin-center"></span>
+      <span class="menu-bar block w-6 h-[1.5px] bg-ink transition-all duration-300 origin-center"></span>
+      <span class="menu-bar block w-6 h-[1.5px] bg-ink transition-all duration-300 origin-center"></span>
+    </button>
+  </div>
+
 </header>
+
+<!-- Menú móvil (panel desplegable) -->
+<div
+  id="mobile-menu"
+  class="fixed top-[60px] left-0 w-full z-40 bg-chalk border-b border-ink
+         flex flex-col px-[20px] py-8 gap-6
+         translate-y-[-110%] transition-transform duration-300 ease-in-out
+         md:hidden"
+  aria-hidden="true"
+>
+  <a href="#servicios" class="t-label text-muted hover:text-ink transition-colors py-2 border-b border-surface" data-menu-link>Servicios</a>
+  <a href="#galeria"   class="t-label text-muted hover:text-ink transition-colors py-2 border-b border-surface" data-menu-link>Galería</a>
+  <a href="#historia"  class="t-label text-muted hover:text-ink transition-colors py-2 border-b border-surface" data-menu-link>Historia</a>
+  <button class="btn-primary w-full mt-2">Reservar</button>
+</div>
 
 
 <!-- ═══════════════════════════════════════════
      HERO
 ═══════════════════════════════════════════ -->
 <main class="mt-[60px] flex-grow">
-<section class="min-h-[88vh] flex flex-col justify-center
-                px-[20px] md:px-[80px]
-                py-24 md:py-40
-                border-b border-ink">
-  <div class="max-w-[1100px]">
-    <!-- Eyebrow -->
-    <p class="t-label text-muted mb-8">Barbería Barberos — San Isidro, Lima</p>
+  <section data-aos="fade-up" data-aos-delay="400" class="min-h-[88vh] flex flex-col justify-center
+  px-[20px] md:px-[80px]
+  py-24 md:py-40
+  border-b border-ink">
+<div class="flex flex-col md:flex-row md:items-center gap-16 w-full">
 
-    <!-- Headline -->
-    <h1 class="t-display text-ink mb-8 max-w-[820px]">
-        El corte que sí queda<br/>como en la foto.
-    </h1>
+<!-- Columna izquierda — texto -->
+<div class="md:w-[42%] md:max-w-[480px] shrink-0 flex flex-col justify-center">
+<p class="t-label text-muted mb-8">Barbería Barberos — San Isidro, Lima</p>
+<h1 class="t-display text-ink mb-8 typewriter-wrap" id="hero-typewriter" aria-label="El corte que sí queda como en la foto.">
+<span class="typewriter-ghost" aria-hidden="true">El corte que sí queda<br/>como en la foto.</span>
+<span class="typewriter-live">
+<span id="typewriter-text">El corte que sí queda<br/>como en la foto.</span><span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span>
+</span>
+</h1>
+<p class="t-body-lg text-muted mb-12 max-w-[540px]">
+Reserva en minutos. Sal en menos de una hora con un corte que dure tres semanas.
+</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="btn-primary">Agendar Cita</button>
+<button class="btn-ghost">Ver Galería</button>
+<button id="btn-temporal" class="btn-ghost" type="button">Botón temporal</button>
+</div>
+</div>
 
-    <!-- Subhead -->
-    <p class="t-body-lg text-muted mb-12 max-w-[540px]">
-        Reserva en minutos. Sal en menos de una hora con un corte que dure tres semanas.
-    </p>
+<!-- Columna derecha — imagen -->
+<div class="hidden md:flex flex-1 items-center justify-center min-w-0">
+<div class="rule overflow-hidden w-full max-w-[620px]">
+<img
+src="/foto-hero.jpg"
+alt="Barbero trabajando en Barbería Barberos"
+class="w-full h-auto block"
+/>
+</div>
+</div>
 
-    <!-- CTAs -->
-    <div class="flex flex-col sm:flex-row gap-4">
-      <button class="btn-primary">Agendar Cita</button>
-      <button class="btn-ghost">Ver Galería</button>
-    </div>
-  </div>
+</div>
 </section>
 
 <!-- SERVICIOS & PRECIOS -->
-<section id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
-    <p class="t-label text-muted mb-16">Lo que ofrecemos</p>
+<section data-aos="fade-up" data-aos-delay="400" id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+    <p class="reveal t-label text-muted mb-16">Lo que ofrecemos</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-ink rule">
-      <div class="bg-chalk p-10 flex flex-col gap-4">
+      <div class="reveal reveal-delay-1 bg-chalk p-10 flex flex-col gap-4">
         <p class="t-headline">Corte clásico</p>
         <p class="t-body text-muted">Corte a tijera o máquina con acabado a navaja.</p>
         <p class="t-label text-ink mt-auto">S/ 65</p>
       </div>
-      <div class="bg-chalk p-10 flex flex-col gap-4">
+      <div class="reveal reveal-delay-2 bg-chalk p-10 flex flex-col gap-4">
         <p class="t-headline">Corte + barba</p>
         <p class="t-body text-muted">Servicio completo con perfilado y arreglo de barba.</p>
         <p class="t-label text-ink mt-auto">S/ 95</p>
       </div>
-      <div class="bg-accent p-10 flex flex-col gap-4">
+      <div class="reveal reveal-delay-3 bg-accent p-10 flex flex-col gap-4">
         <p class="t-label text-chalk opacity-60 mb-1">Más solicitado</p>
         <p class="t-headline text-chalk">Experiencia premium</p>
         <p class="t-body text-chalk opacity-70">Corte, barba, lavado y tratamiento capilar.</p>
@@ -189,10 +309,10 @@
 <!-- ═══════════════════════════════════════════
      BENTO GRID (visual anchor)
 ═══════════════════════════════════════════ -->
-<section id="galeria" class="px-[20px] md:px-[80px] py-24">
+<section data-aos="fade-up" data-aos-delay="80" id="galeria" class="px-[20px] md:px-[80px] py-24">
 
   <!-- Encabezado de sección -->
-  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+  <div class="reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
     <div>
       <p class="t-label text-muted mb-4">Galería</p>
       <h2 class="t-headline text-ink max-w-[420px]">El arte del corte, en cada detalle</h2>
@@ -207,36 +327,57 @@
        style="grid-auto-rows: 300px;">
 
     <!-- [Fila 1, col 1–2] Foto principal del barbero -->
-    <div class="md:col-span-2 md:row-span-2 rule overflow-hidden">
+    <div class="reveal reveal-delay-1 md:col-span-2 md:row-span-2 rule overflow-hidden">
       <div class="w-full h-full bg-cover bg-center"
            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7hAZKBeL3qUvNvKJi0ScU1A4XQXSkTqfw8S9FYjrPamPGXMGApb4I08E3fTxzCdrTHuRqDhpnmZw_eqKluRLxhirWB7EaKxx3DgzXv-cHm1ws4GUgSwgPeITjeAdA_0JyTwVC5tgX8zY_ZS3zTHTbrPgfJE92HewYWixHoKcyzLx-Kp8CIPYyHFad-hwZ0yeHfF_4L3RWuERwpi5DQkpAKhK_ytANZWSu0lCFPeIquqGckDOxz089JKMYeG84FM9_USkCGkjVCE0')">
       </div>
     </div>
 
-    <!-- [Fila 1, col 3] Panel azul — dato de antigüedad -->
-    <div class="rule bg-accent p-10 flex flex-col justify-end">
+    <div class="reveal reveal-delay-2 rule bg-accent p-10 flex flex-col justify-end">
       <p class="t-label text-chalk opacity-60 mb-3">Fundada en</p>
-      <p class="t-headline text-chalk">2015</p>
+      <p class="t-headline text-chalk"
+         data-counter
+         data-from="2000"
+         data-to="2015"
+         data-duration="1600"
+         data-format="year">
+        2015
+      </p>
     </div>
-
+    
     <!-- [Fila 2, col 3] Panel neutro — especialidad -->
-    <div class="rule bg-surface p-10 flex flex-col justify-end">
-      <p class="t-label text-muted mb-3">Especialidad</p>
-      <p class="t-headline text-ink">Grooming<br/>de precisión</p>
-    </div>
+    <div class="reveal reveal-delay-3 rule bg-surface p-10 flex flex-col justify-end">
+      <p class="t-label text-muted mb-3">Clientes atendidos</p>
+      <p class="t-headline text-ink"
+         data-counter
+         data-from="0"
+         data-to="4000"
+         data-duration="1800"
+         data-format="plus">
+        +4,000
+      </p>
+    </div>    
+   
 
     <!-- [Fila 3, col 1–2] Foto herramientas -->
-    <div class="md:col-span-2 rule overflow-hidden">
+    <div class="reveal reveal-delay-2 md:col-span-2 rule overflow-hidden">
       <div class="w-full h-full bg-cover bg-center"
            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAa9jVHw5PlHyz8TD3Nu7RTmNh63XthDMvEeSeSin-xcLtaU2Ekc5v8ICf8FVebhmLJQBtOUCjMcikvQvjcK2I2jKQguJm59FStTK9VfHw8iOY13KOtzTpKHPB3mr0MU0csHgBTku4LjmgQnHiThpbh9eSSkJ2eKO4Jg7DzOX2BVaxFVw-v0hIHlMkEG14dDDmtsHZhEg5DWXiwBSdFNf70ALvPdmbIQIzehq-pV3rZnPYG9saqdtIWFTT7lFDmv8pdzcI6s0XdYRI')">
       </div>
     </div>
 
-    <!-- [Fila 3, col 3] Card nueva — stat o dato de servicio -->
-    <div class="rule bg-ink p-10 flex flex-col justify-end">
-      <p class="t-label text-chalk opacity-60 mb-3">Clientes atendidos</p>
-      <p class="t-headline text-chalk">+4,000</p>
+    <div class="reveal reveal-delay-3 rule bg-ink p-10 flex flex-col justify-end">
+      <p class="t-label text-chalk opacity-60 mb-3">Servicios disponibles</p>
+      <p class="t-headline text-chalk"
+         data-counter
+         data-from="0"
+         data-to="20"
+         data-duration="1500"
+         data-format="plus">
+        +20
+      </p>
     </div>
+    
 
   </div>
 </section>
@@ -245,14 +386,14 @@
 <!-- ═══════════════════════════════════════════
      BENEFICIOS / SERVICIOS
 ═══════════════════════════════════════════ -->
-<section id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+<section id="beneficios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
 
   <!-- Eyebrow -->
-  <p class="t-label text-muted mb-16">Por qué Barbería Barberos</p>
+  <p class="reveal t-label text-muted mb-16">Por qué Barbería Barberos</p>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
 
-    <div class="flex flex-col gap-5">
+    <div class="reveal reveal-delay-1 flex flex-col gap-5">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">star</span>
       </div>
@@ -260,7 +401,7 @@
       <p class="t-body text-muted">Técnicas tradicionales combinadas con el enfoque más contemporáneo de la estética masculina.</p>
     </div>
 
-    <div class="flex flex-col gap-5">
+    <div class="reveal reveal-delay-2 flex flex-col gap-5">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">content_cut</span>
       </div>
@@ -268,7 +409,7 @@
       <p class="t-body text-muted">Cada corte es una pieza única, adaptada a la estructura facial y personalidad de cada cliente.</p>
     </div>
 
-    <div class="flex flex-col gap-5">
+    <div class="reveal reveal-delay-3 flex flex-col gap-5">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">chair</span>
       </div>
@@ -287,14 +428,14 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
     <!-- Foto -->
-    <div class="rule overflow-hidden" style="aspect-ratio: 4/3;">
+    <div class="reveal rule overflow-hidden" style="aspect-ratio: 4/3;">
       <img alt="Interior de Barbería Barberos"
            class="w-full h-full object-cover"
            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQV57E69OxA2JvWp6GUQpECNNDK9ADW_AZZ-7VwUWRpXb9-hDZYKEqXojEq5ITomqWsRZJpqCP-O4HgDwDzyjmZ1fA8L8OzZbLXE9ft5P4akBPAiBs6ac_AAvND7t71nSJBTcmp5wtVKTAQzWLwFrbLYyw2dnDQPxVYwhAdbM0Naly8QKUaXSa9H54e0RxCWYscqVYrd8tikzDQIRzHwurQdOJFYbr7M5SYf1_SRdIpEglDPhzRg1U22R-U3VhKwPf8O4dXizKulY"/>
     </div>
 
     <!-- Texto -->
-    <div class="flex flex-col gap-10 pt-2">
+    <div class="reveal reveal-delay-1 flex flex-col gap-10 pt-2">
       <div>
         <p class="t-label text-muted mb-6">Nuestra historia</p>
         <h2 class="t-headline mb-6">Fundada con una visión clara</h2>
@@ -318,24 +459,24 @@
 </section>
 
 <!-- TESTIMONIOS -->
-<section class="px-[20px] md:px-[80px] py-24 border-t border-ink">
-    <p class="t-label text-muted mb-16">Lo que dicen nuestros clientes</p>
+<section id="testimonios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+    <p class="reveal t-label text-muted mb-16">Lo que dicen nuestros clientes</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="rule p-8 flex flex-col gap-6">
+      <div class="reveal reveal-delay-1 rule p-8 flex flex-col gap-6">
         <p class="t-body text-ink">"El mejor corte que he tenido en Lima. Atención impecable y resultado exactamente lo que pedí."</p>
         <div class="rule-muted border-t pt-6">
           <p class="t-label text-ink">Rodrigo M.</p>
           <p class="t-caption text-muted mt-1">Cliente desde 2021</p>
         </div>
       </div>
-      <div class="rule p-8 flex flex-col gap-6">
+      <div class="reveal reveal-delay-2 rule p-8 flex flex-col gap-6">
         <p class="t-body text-ink">"Vine por primera vez sin referencias y salí siendo cliente fijo. El ambiente y la técnica no tienen comparación."</p>
         <div class="rule-muted border-t pt-6">
           <p class="t-label text-ink">Sebastián V.</p>
           <p class="t-caption text-muted mt-1">Cliente desde 2022</p>
         </div>
       </div>
-      <div class="rule p-8 flex flex-col gap-6">
+      <div class="reveal reveal-delay-3 rule p-8 flex flex-col gap-6">
         <p class="t-body text-ink">"Preciso, rápido y sin distracciones. Exactamente lo que buscaba. Ya agendé para el próximo mes."</p>
         <div class="rule-muted border-t pt-6">
           <p class="t-label text-ink">Alonso P.</p>
@@ -348,52 +489,159 @@
 <!-- ═══════════════════════════════════════════
      CTA FINAL
 ═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════
+     CONTACTO / RESERVA
+═══════════════════════════════════════════ -->
 <section class="px-[20px] md:px-[80px] py-24 border-t border-ink">
-  <div class="rule p-16 md:p-28 flex flex-col items-start gap-10 bg-ink">
-    <p class="t-label text-chalk opacity-50">Reserva tu lugar</p>
-    <h2 class="t-display text-chalk max-w-[600px]">
-      Listo para el cambio?
-    </h2>
-    <div class="flex flex-col sm:flex-row gap-4">
-      <!-- CTA primario: blanco sobre negro (contraste máximo) -->
-      <button style="
-        display:inline-block;
-        background:#F8F8F6;
-        color:#111111;
-        font-size:13px;
-        font-weight:700;
-        letter-spacing:0.08em;
-        text-transform:uppercase;
-        padding:18px 40px;
-        border:1px solid #F8F8F6;
-        border-radius:2px;
-        cursor:pointer;
-        transition:background 0.15s;
-      " onmouseover="this.style.background='#EFEFED'" onmouseout="this.style.background='#F8F8F6'">
-        Reservar Ahora 
-      </button>
-      <!-- CTA secundario: ghost sobre negro -->
-      <button style="
-        display:inline-block;
-        background:transparent;
-        color:#F8F8F6;
-        font-size:13px;
-        font-weight:700;
-        letter-spacing:0.08em;
-        text-transform:uppercase;
-        padding:18px 40px;
-        border:1px solid rgba(248,248,246,0.4);
-        border-radius:2px;
-        cursor:pointer;
-        transition:border-color 0.15s;
-      " onmouseover="this.style.borderColor='#F8F8F6'" onmouseout="this.style.borderColor='rgba(248,248,246,0.4)'">
-        Ver Galería
-      </button>
-      <a href="https://wa.me/51XXXXXXXXX" 
-   class="t-label text-chalk opacity-50 hover:opacity-100 transition-opacity flex items-center gap-3">
-  <span class="material-symbols-outlined" style="color:currentColor;font-size:18px;">chat</span>
-  O escríbenos por WhatsApp
-</a>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+
+    <!-- Columna izquierda — texto -->
+    <div class="flex flex-col gap-8">
+      <div>
+        <p class="t-label text-muted mb-6">Reserva tu lugar</p>
+        <h2 class="t-display text-ink max-w-[480px]">
+          Listo para el cambio?
+        </h2>
+      </div>
+
+      <p class="t-body-lg text-muted max-w-[400px]">
+        Completa el formulario y te confirmamos tu cita en menos de 24 horas.
+      </p>
+
+      <!-- Beneficios -->
+      <ul class="flex flex-col gap-4">
+        <li class="flex items-start gap-3">
+          <span class="t-label text-ink mt-[2px]">—</span>
+          <span class="t-body text-muted">Sin pagos anticipados</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="t-label text-ink mt-[2px]">—</span>
+          <span class="t-body text-muted">Cancelación gratuita hasta 2 horas antes</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="t-label text-ink mt-[2px]">—</span>
+          <span class="t-body text-muted">Confirmación por WhatsApp</span>
+        </li>
+      </ul>
+
+      <!-- WhatsApp directo -->
+      <a href="https://wa.me/51932927716" target="_blank"
+         class="t-label text-muted hover:text-ink transition-colors flex items-center gap-3 w-fit">
+        <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+        O escríbenos directo por WhatsApp
+      </a>
+    </div>
+
+    <!-- Columna derecha — formulario -->
+    <div class="rule p-8 md:p-10 bg-surface">
+
+      <!-- Estado: formulario -->
+      <form id="contact-form" novalidate class="flex flex-col gap-6">
+
+        <!-- Nombre -->
+        <div class="flex flex-col gap-2">
+          <label for="nombre" class="t-label text-ink">Nombre completo *</label>
+          <input
+            id="nombre"
+            name="nombre"
+            type="text"
+            placeholder="Tu nombre"
+            required
+            class="w-full bg-chalk border border-ink px-4 py-3 t-body text-ink
+                   placeholder:text-muted
+                   focus:outline-none focus:border-accent
+                   transition-colors duration-150"
+          />
+          <span class="t-caption text-red-600 hidden" data-error="nombre">Este campo es obligatorio.</span>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="flex flex-col gap-2">
+          <label for="telefono" class="t-label text-ink">WhatsApp / Teléfono *</label>
+          <input
+            id="telefono"
+            name="telefono"
+            type="tel"
+            placeholder="+51 999 999 999"
+            required
+            class="w-full bg-chalk border border-ink px-4 py-3 t-body text-ink
+                   placeholder:text-muted
+                   focus:outline-none focus:border-accent
+                   transition-colors duration-150"
+          />
+          <span class="t-caption text-red-600 hidden" data-error="telefono">Este campo es obligatorio.</span>
+        </div>
+
+        <!-- Servicio -->
+        <div class="flex flex-col gap-2">
+          <label for="servicio" class="t-label text-ink">Servicio *</label>
+          <select
+            id="servicio"
+            name="servicio"
+            required
+            class="w-full bg-chalk border border-ink px-4 py-3 t-body text-ink
+                   focus:outline-none focus:border-accent
+                   transition-colors duration-150 cursor-pointer"
+          >
+            <option value="" disabled selected>Selecciona un servicio</option>
+            <option value="Corte clásico — S/ 65">Corte clásico — S/ 65</option>
+            <option value="Corte + barba — S/ 95">Corte + barba — S/ 95</option>
+            <option value="Experiencia premium — S/ 140">Experiencia premium — S/ 140</option>
+          </select>
+          <span class="t-caption text-red-600 hidden" data-error="servicio">Selecciona un servicio.</span>
+        </div>
+
+        <!-- Mensaje opcional -->
+        <div class="flex flex-col gap-2">
+          <label for="mensaje" class="t-label text-ink">
+            Mensaje
+            <span class="t-caption text-muted normal-case tracking-normal font-normal ml-1">(opcional)</span>
+          </label>
+          <textarea
+            id="mensaje"
+            name="mensaje"
+            rows="3"
+            placeholder="¿Alguna preferencia o consulta?"
+            class="w-full bg-chalk border border-ink px-4 py-3 t-body text-ink
+                   placeholder:text-muted resize-none
+                   focus:outline-none focus:border-accent
+                   transition-colors duration-150"
+          ></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button
+          id="submit-btn"
+          type="submit"
+          class="w-full bg-ink text-chalk t-label py-5 px-6
+                 border border-ink
+                 hover:bg-accent hover:border-accent
+                 transition-colors duration-150
+                 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-ink disabled:hover:border-ink"
+        >
+          Reservar ahora
+        </button>
+
+        <!-- Error de red -->
+        <p id="form-error" class="t-caption text-red-600 text-center hidden">
+          Hubo un error al enviar. Intenta de nuevo o escríbenos por WhatsApp.
+        </p>
+
+      </form>
+
+      <!-- Estado: confirmación (oculto hasta envío exitoso) -->
+      <div id="form-success" class="hidden flex flex-col items-center justify-center gap-6 py-16 text-center">
+        <div class="w-14 h-14 border border-green-700 flex items-center justify-center">
+          <span class="material-symbols-outlined text-green-700" style="font-size:28px;">check</span>
+        </div>
+        <div>
+          <p class="t-headline text-ink mb-2">¡Solicitud enviada!</p>
+          <p class="t-body text-muted max-w-[280px] mx-auto">
+            Te confirmamos tu cita por WhatsApp en menos de 24 horas.
+          </p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -417,5 +665,15 @@
   <div class="t-caption text-muted">© 2025 Barbería Barberos</div>
 </footer>
 
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+  duration: 3000,       // duración de la animación en ms
+  easing: 'ease-out',  // curva de animación
+  once: true,          // anima solo la primera vez
+  offset: 60,          // px desde el borde del viewport para disparar
+});
+</script>
+<script src="scripts.js"></script>
 </body>
 </html>
