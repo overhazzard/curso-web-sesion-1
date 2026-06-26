@@ -3,8 +3,35 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Barbería Barberos | Cortes de Precisión</title>
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+<title>Barbería Barberos | Cortes de Precisión en Lima</title>
+<meta name="description" content="Barbería en San Isidro, Lima. Cortes clásicos, arreglo de barba y experiencia premium desde S/ 65. Reserva tu cita hoy y sal listo en menos de una hora.">
+<meta name="keywords" content="barbería Lima, corte de cabello Lima, barbero San Isidro, arreglo de barba Lima, barbería premium, corte clásico Lima, barbería San Isidro, grooming masculino Lima">
+<!-- ═══════════════════════════════════════════
+     OPEN GRAPH (Facebook, WhatsApp, LinkedIn)
+═══════════════════════════════════════════ -->
+<meta property="og:type"        content="business.business">
+<meta property="og:locale"      content="es_PE">
+<meta property="og:url"         content="https://barberiabarberos.vercel.app/">
+<meta property="og:title"       content="Barbería Barberos | Cortes de Precisión en Lima">
+<meta property="og:description" content="Barbería en San Isidro, Lima. Cortes clásicos, arreglo de barba y experiencia premium desde S/ 65. Reserva tu cita hoy y sal listo en menos de una hora.">
+<meta property="og:image"       content="https://barberiabarberos.vercel.app/barber.webp">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"   content="Barbería Barberos — San Isidro, Lima">
+<meta property="og:site_name"   content="Barbería Barberos">
+
+<!-- ═══════════════════════════════════════════
+     TWITTER CARD (X)
+═══════════════════════════════════════════ -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Barbería Barberos | Cortes de Precisión en Lima">
+<meta name="twitter:description" content="Barbería en San Isidro, Lima. Cortes clásicos, arreglo de barba y experiencia premium desde S/ 65. Reserva tu cita hoy y sal listo en menos de una hora.">
+<meta name="twitter:image"       content="https://barberiabarberos.vercel.app/barber.webp">
+<meta name="twitter:image:alt"   content="Barbería Barberos — San Isidro, Lima">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
@@ -108,28 +135,7 @@
   /* Scroll suave */
   html { scroll-behavior: smooth; }
 
-  /* Scroll reveal — solo oculta si JS está activo */
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
-
-  html.js .reveal:not(.is-visible) {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
-  }
-
-  html.js .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  html.js .reveal-delay-1 { transition-delay: 0.08s; }
-  html.js .reveal-delay-2 { transition-delay: 0.16s; }
-  html.js .reveal-delay-3 { transition-delay: 0.24s; }
-  html.js .reveal-delay-4 { transition-delay: 0.32s; }
-  html.js .reveal-delay-5 { transition-delay: 0.4s; }
+  /* Scroll reveal — eliminado, se usa AOS */
 
   /* Typewriter hero */
   .typewriter-wrap {
@@ -170,16 +176,59 @@
     50% { opacity: 0; }
   }
 
+
+  /* ── Hero parallax ── */
+  #hero-inner { will-change: opacity, filter, transform; }
+
+  /* ── Card hover: scale + glow ── */
+  .card-anim {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.35s ease;
+  }
+  .card-anim:hover {
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 20px 56px rgba(26, 0, 204, 0.18),
+                0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── Hero: entrada visible al cargar ── */
+  @keyframes hero-in {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .hero-in { animation: hero-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+  /* ── Scroll animations: JS añade is-waiting (oculto) y is-visible (anima) ── */
+  /* Si JS no corre, los elementos se ven normales (sin is-waiting) */
+  @keyframes anim-up    { from { opacity:0; transform:translateY(55px);  } to { opacity:1; transform:none; } }
+  @keyframes anim-down  { from { opacity:0; transform:translateY(-40px); } to { opacity:1; transform:none; } }
+  @keyframes anim-left  { from { opacity:0; transform:translateX(70px);  } to { opacity:1; transform:none; } }
+  @keyframes anim-right { from { opacity:0; transform:translateX(-70px); } to { opacity:1; transform:none; } }
+
+  [data-anim].is-waiting { opacity: 0; }
+  [data-anim="fade-up"].is-waiting    { transform: translateY(55px); }
+  [data-anim="fade-down"].is-waiting  { transform: translateY(-40px); }
+  [data-anim="fade-left"].is-waiting  { transform: translateX(70px); }
+  [data-anim="fade-right"].is-waiting { transform: translateX(-70px); }
+
+  [data-anim="fade-up"].is-visible    { animation: anim-up    0.8s cubic-bezier(0.22,1,0.36,1) both; }
+  [data-anim="fade-down"].is-visible  { animation: anim-down  0.8s cubic-bezier(0.22,1,0.36,1) both; }
+  [data-anim="fade-left"].is-visible  { animation: anim-left  0.8s cubic-bezier(0.22,1,0.36,1) both; }
+  [data-anim="fade-right"].is-visible { animation: anim-right 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+
+  [data-anim].is-visible[data-delay="1"] { animation-delay: 130ms; }
+  [data-anim].is-visible[data-delay="2"] { animation-delay: 260ms; }
+  [data-anim].is-visible[data-delay="3"] { animation-delay: 390ms; }
+
   @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; animation: none !important; }
-    html.js .reveal:not(.is-visible),
-    html.js .reveal.is-visible {
-      opacity: 1;
-      transform: none;
-    }
-    .typewriter-ghost { display: none; }
-    .typewriter-live { position: static; }
-    .typewriter-cursor { display: none; }
+    .typewriter-cursor         { display: none; animation: none !important; }
+    .typewriter-ghost          { display: none; }
+    .typewriter-live           { position: static; transition: none !important; }
+    .card-anim                 { transition: none !important; }
+    .card-anim:hover           { transform: none; box-shadow: none; }
+    .hero-in                   { animation: none; opacity: 1; transform: none; }
+    [data-anim].is-waiting     { opacity: 1 !important; transform: none !important; }
+    [data-anim].is-visible     { animation: none !important; }
   }
 </style>
 </head>
@@ -243,14 +292,14 @@
      HERO
 ═══════════════════════════════════════════ -->
 <main class="mt-[60px] flex-grow">
-  <section data-aos="fade-up" data-aos-delay="400" class="min-h-[88vh] flex flex-col justify-center
+  <section class="min-h-[88vh] flex flex-col justify-center
   px-[20px] md:px-[80px]
   py-24 md:py-40
   border-b border-ink">
-<div class="flex flex-col md:flex-row md:items-center gap-16 w-full">
+<div id="hero-inner" class="flex flex-col md:flex-row md:items-center gap-16 w-full">
 
 <!-- Columna izquierda — texto -->
-<div class="md:w-[42%] md:max-w-[480px] shrink-0 flex flex-col justify-center">
+<div class="md:w-[42%] md:max-w-[480px] shrink-0 flex flex-col justify-center hero-in">
 <p class="t-label text-muted mb-8">Barbería Barberos — San Isidro, Lima</p>
 <h1 class="t-display text-ink mb-8 typewriter-wrap" id="hero-typewriter" aria-label="El corte que sí queda como en la foto.">
 <span class="typewriter-ghost" aria-hidden="true">El corte que sí queda<br/>como en la foto.</span>
@@ -269,7 +318,7 @@ Reserva en minutos. Sal en menos de una hora con un corte que dure tres semanas.
 </div>
 
 <!-- Columna derecha — imagen -->
-<div class="hidden md:flex flex-1 items-center justify-center min-w-0">
+<div class="hidden md:flex flex-1 items-center justify-center min-w-0 hero-in" style="animation-delay: 0.3s">
 <div class="rule overflow-hidden w-full max-w-[620px]">
 <img
 src="/foto-hero.jpg"
@@ -283,20 +332,20 @@ class="w-full h-auto block"
 </section>
 
 <!-- SERVICIOS & PRECIOS -->
-<section data-aos="fade-up" data-aos-delay="400" id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
-    <p class="reveal t-label text-muted mb-16">Lo que ofrecemos</p>
+<section id="servicios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
+    <p data-anim="fade-up" class="t-label text-muted mb-16">Lo que ofrecemos</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-ink rule">
-      <div class="reveal reveal-delay-1 bg-chalk p-10 flex flex-col gap-4">
+      <div data-anim="fade-up" class="bg-chalk p-10 flex flex-col gap-4 card-anim">
         <p class="t-headline">Corte clásico</p>
         <p class="t-body text-muted">Corte a tijera o máquina con acabado a navaja.</p>
         <p class="t-label text-ink mt-auto">S/ 65</p>
       </div>
-      <div class="reveal reveal-delay-2 bg-chalk p-10 flex flex-col gap-4">
+      <div data-anim="fade-up" data-delay="1" class="bg-chalk p-10 flex flex-col gap-4 card-anim">
         <p class="t-headline">Corte + barba</p>
         <p class="t-body text-muted">Servicio completo con perfilado y arreglo de barba.</p>
         <p class="t-label text-ink mt-auto">S/ 95</p>
       </div>
-      <div class="reveal reveal-delay-3 bg-accent p-10 flex flex-col gap-4">
+      <div data-anim="fade-up" data-delay="2" class="bg-accent p-10 flex flex-col gap-4 card-anim">
         <p class="t-label text-chalk opacity-60 mb-1">Más solicitado</p>
         <p class="t-headline text-chalk">Experiencia premium</p>
         <p class="t-body text-chalk opacity-70">Corte, barba, lavado y tratamiento capilar.</p>
@@ -309,10 +358,10 @@ class="w-full h-auto block"
 <!-- ═══════════════════════════════════════════
      BENTO GRID (visual anchor)
 ═══════════════════════════════════════════ -->
-<section data-aos="fade-up" data-aos-delay="80" id="galeria" class="px-[20px] md:px-[80px] py-24">
+<section id="galeria" class="px-[20px] md:px-[80px] py-24">
 
   <!-- Encabezado de sección -->
-  <div class="reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+  <div data-anim="fade-up" class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
     <div>
       <p class="t-label text-muted mb-4">Galería</p>
       <h2 class="t-headline text-ink max-w-[420px]">El arte del corte, en cada detalle</h2>
@@ -327,13 +376,13 @@ class="w-full h-auto block"
        style="grid-auto-rows: 300px;">
 
     <!-- [Fila 1, col 1–2] Foto principal del barbero -->
-    <div class="reveal reveal-delay-1 md:col-span-2 md:row-span-2 rule overflow-hidden">
+    <div data-anim="fade-right" class="md:col-span-2 md:row-span-2 rule overflow-hidden">
       <div class="w-full h-full bg-cover bg-center"
            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD7hAZKBeL3qUvNvKJi0ScU1A4XQXSkTqfw8S9FYjrPamPGXMGApb4I08E3fTxzCdrTHuRqDhpnmZw_eqKluRLxhirWB7EaKxx3DgzXv-cHm1ws4GUgSwgPeITjeAdA_0JyTwVC5tgX8zY_ZS3zTHTbrPgfJE92HewYWixHoKcyzLx-Kp8CIPYyHFad-hwZ0yeHfF_4L3RWuERwpi5DQkpAKhK_ytANZWSu0lCFPeIquqGckDOxz089JKMYeG84FM9_USkCGkjVCE0')">
       </div>
     </div>
 
-    <div class="reveal reveal-delay-2 rule bg-accent p-10 flex flex-col justify-end">
+    <div data-anim="fade-left" data-delay="1" class="rule bg-accent p-10 flex flex-col justify-end card-anim">
       <p class="t-label text-chalk opacity-60 mb-3">Fundada en</p>
       <p class="t-headline text-chalk"
          data-counter
@@ -346,7 +395,7 @@ class="w-full h-auto block"
     </div>
     
     <!-- [Fila 2, col 3] Panel neutro — especialidad -->
-    <div class="reveal reveal-delay-3 rule bg-surface p-10 flex flex-col justify-end">
+    <div data-anim="fade-left" data-delay="2" class="rule bg-surface p-10 flex flex-col justify-end card-anim">
       <p class="t-label text-muted mb-3">Clientes atendidos</p>
       <p class="t-headline text-ink"
          data-counter
@@ -360,13 +409,13 @@ class="w-full h-auto block"
    
 
     <!-- [Fila 3, col 1–2] Foto herramientas -->
-    <div class="reveal reveal-delay-2 md:col-span-2 rule overflow-hidden">
+    <div data-anim="fade-right" class="md:col-span-2 rule overflow-hidden">
       <div class="w-full h-full bg-cover bg-center"
            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAa9jVHw5PlHyz8TD3Nu7RTmNh63XthDMvEeSeSin-xcLtaU2Ekc5v8ICf8FVebhmLJQBtOUCjMcikvQvjcK2I2jKQguJm59FStTK9VfHw8iOY13KOtzTpKHPB3mr0MU0csHgBTku4LjmgQnHiThpbh9eSSkJ2eKO4Jg7DzOX2BVaxFVw-v0hIHlMkEG14dDDmtsHZhEg5DWXiwBSdFNf70ALvPdmbIQIzehq-pV3rZnPYG9saqdtIWFTT7lFDmv8pdzcI6s0XdYRI')">
       </div>
     </div>
 
-    <div class="reveal reveal-delay-3 rule bg-ink p-10 flex flex-col justify-end">
+    <div data-anim="fade-left" data-delay="1" class="rule bg-ink p-10 flex flex-col justify-end card-anim">
       <p class="t-label text-chalk opacity-60 mb-3">Servicios disponibles</p>
       <p class="t-headline text-chalk"
          data-counter
@@ -389,11 +438,11 @@ class="w-full h-auto block"
 <section id="beneficios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
 
   <!-- Eyebrow -->
-  <p class="reveal t-label text-muted mb-16">Por qué Barbería Barberos</p>
+  <p data-anim="fade-up" class="t-label text-muted mb-16">Por qué Barbería Barberos</p>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
 
-    <div class="reveal reveal-delay-1 flex flex-col gap-5">
+    <div data-anim="fade-up" class="card-anim flex flex-col gap-5">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">star</span>
       </div>
@@ -401,7 +450,7 @@ class="w-full h-auto block"
       <p class="t-body text-muted">Técnicas tradicionales combinadas con el enfoque más contemporáneo de la estética masculina.</p>
     </div>
 
-    <div class="reveal reveal-delay-2 flex flex-col gap-5">
+    <div data-anim="fade-up" class="card-anim flex flex-col gap-5" data-delay="1">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">content_cut</span>
       </div>
@@ -409,7 +458,7 @@ class="w-full h-auto block"
       <p class="t-body text-muted">Cada corte es una pieza única, adaptada a la estructura facial y personalidad de cada cliente.</p>
     </div>
 
-    <div class="reveal reveal-delay-3 flex flex-col gap-5">
+    <div data-anim="fade-up" class="card-anim flex flex-col gap-5" data-delay="2">
       <div class="w-12 h-12 rule flex items-center justify-center">
         <span class="material-symbols-outlined" style="color:#111111;">chair</span>
       </div>
@@ -428,14 +477,14 @@ class="w-full h-auto block"
   <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
     <!-- Foto -->
-    <div class="reveal rule overflow-hidden" style="aspect-ratio: 4/3;">
+    <div data-anim="fade-right" class="rule overflow-hidden" style="aspect-ratio: 4/3;">
       <img alt="Interior de Barbería Barberos"
            class="w-full h-full object-cover"
            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQV57E69OxA2JvWp6GUQpECNNDK9ADW_AZZ-7VwUWRpXb9-hDZYKEqXojEq5ITomqWsRZJpqCP-O4HgDwDzyjmZ1fA8L8OzZbLXE9ft5P4akBPAiBs6ac_AAvND7t71nSJBTcmp5wtVKTAQzWLwFrbLYyw2dnDQPxVYwhAdbM0Naly8QKUaXSa9H54e0RxCWYscqVYrd8tikzDQIRzHwurQdOJFYbr7M5SYf1_SRdIpEglDPhzRg1U22R-U3VhKwPf8O4dXizKulY"/>
     </div>
 
     <!-- Texto -->
-    <div class="reveal reveal-delay-1 flex flex-col gap-10 pt-2">
+    <div data-anim="fade-left" data-delay="1" class="flex flex-col gap-10 pt-2">
       <div>
         <p class="t-label text-muted mb-6">Nuestra historia</p>
         <h2 class="t-headline mb-6">Fundada con una visión clara</h2>
@@ -460,25 +509,25 @@ class="w-full h-auto block"
 
 <!-- TESTIMONIOS -->
 <section id="testimonios" class="px-[20px] md:px-[80px] py-24 border-t border-ink">
-    <p class="reveal t-label text-muted mb-16">Lo que dicen nuestros clientes</p>
+    <p data-anim="fade-up" class="t-label text-muted mb-16">Lo que dicen nuestros clientes</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="reveal reveal-delay-1 rule p-8 flex flex-col gap-6">
+      <div data-anim="fade-up" class="rule p-8 flex flex-col gap-6 card-anim">
         <p class="t-body text-ink">"El mejor corte que he tenido en Lima. Atención impecable y resultado exactamente lo que pedí."</p>
-        <div class="rule-muted border-t pt-6">
+        <div class="border-t border-surface pt-6">
           <p class="t-label text-ink">Rodrigo M.</p>
           <p class="t-caption text-muted mt-1">Cliente desde 2021</p>
         </div>
       </div>
-      <div class="reveal reveal-delay-2 rule p-8 flex flex-col gap-6">
+      <div data-anim="fade-up" data-delay="1" class="rule p-8 flex flex-col gap-6 card-anim">
         <p class="t-body text-ink">"Vine por primera vez sin referencias y salí siendo cliente fijo. El ambiente y la técnica no tienen comparación."</p>
-        <div class="rule-muted border-t pt-6">
+        <div class="border-t border-surface pt-6">
           <p class="t-label text-ink">Sebastián V.</p>
           <p class="t-caption text-muted mt-1">Cliente desde 2022</p>
         </div>
       </div>
-      <div class="reveal reveal-delay-3 rule p-8 flex flex-col gap-6">
+      <div data-anim="fade-up" data-delay="2" class="rule p-8 flex flex-col gap-6 card-anim">
         <p class="t-body text-ink">"Preciso, rápido y sin distracciones. Exactamente lo que buscaba. Ya agendé para el próximo mes."</p>
-        <div class="rule-muted border-t pt-6">
+        <div class="border-t border-surface pt-6">
           <p class="t-label text-ink">Alonso P.</p>
           <p class="t-caption text-muted mt-1">Cliente desde 2023</p>
         </div>
@@ -665,15 +714,6 @@ class="w-full h-auto block"
   <div class="t-caption text-muted">© 2025 Barbería Barberos</div>
 </footer>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>
-  AOS.init({
-  duration: 3000,       // duración de la animación en ms
-  easing: 'ease-out',  // curva de animación
-  once: true,          // anima solo la primera vez
-  offset: 60,          // px desde el borde del viewport para disparar
-});
-</script>
-<script src="scripts.js"></script>
+<script src="scripts.js" defer></script>
 </body>
 </html>

@@ -1,3 +1,45 @@
+/* ══════════════════════════════════════════
+   1. HERO PARALLAX — blur + fade al hacer scroll
+══════════════════════════════════════════ */
+(function initHeroParallax() {
+  if (globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const inner = document.getElementById('hero-inner');
+  if (!inner) return;
+
+  globalThis.addEventListener('scroll', function () {
+    const y        = globalThis.scrollY;
+    const progress = Math.min(y / 500, 1);
+    inner.style.opacity   = (1 - progress * 0.9).toFixed(3);
+    inner.style.filter    = 'blur(' + (progress * 7).toFixed(1) + 'px)';
+    inner.style.transform = 'translateY(' + (y * 0.12).toFixed(1) + 'px)';
+  }, { passive: true });
+})();
+
+/* ══════════════════════════════════════════
+   2. REVEAL OBSERVER — fade-up al entrar en viewport
+══════════════════════════════════════════ */
+(function initAnims() {
+  var els = document.querySelectorAll('[data-anim]');
+  if (!els.length) return;
+
+  var noMotion = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!noMotion) {
+    els.forEach(function (el) { el.classList.add('is-waiting'); });
+  }
+
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.remove('is-waiting');
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+  els.forEach(function (el) { obs.observe(el); });
+})();
+
       /* ══════════════════════════════════════════
          3. TYPEWRITER — título del hero
          Lee el texto del nodo, lo borra y lo
